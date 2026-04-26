@@ -1,0 +1,42 @@
+# Unity
+UnityProject/[Ll]ibrary/
+UnityProject/[Tt]emp/
+UnityProject/[Oo]bj/
+UnityProject/[Bb]uild/
+UnityProject/[Bb]uilds/
+UnityProject/[Ll]ogs/
+UnityProject/[Uu]ser[Ss]ettings/
+UnityProject/MemoryCaptures/
+UnityProject/Recordings/
+
+# Visual Studio / Rider
+.vs/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PC / standalone build outputs (do not commit)
+MonoBleedingEdge/
+UnityProject.exe
+UnityCrashHandler64.exe
+UnityPlayer.dll
+UnityProject_Data/
+UnityProject_BurstDebugInformation_DoNotShip/
+
+# Optional duplicate board uploads at repo root (Assets copy is canonical)
+uploads_files_*_Stock+Ticker+Board.*

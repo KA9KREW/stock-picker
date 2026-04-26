@@ -1,0 +1,112 @@
+---
+description: Stock Ticker MVP — architecture, determinism, data-driven balance, acceptance criteria (primary; overrides generic Unity 6 guidance)
+alwaysApply: true
+---
+
+# Stock Ticker MVP - Project Rules
+
+Last Updated: 2026-04-26  
+Version: 1.0
+
+## Editor and stack (authoritative)
+
+- **Unity Editor:** **2022.3.62f3 LTS** (see `ProjectSettings/ProjectVersion.txt`). Do not assume Unity 6 / Unity 2025 APIs unless explicitly upgrading the project.
+- **Rendering / UI (current MVP):** **Built-in + URP** when added; **uGUI + TextMeshPro** for HUD. **UI Toolkit** is allowed for new screens if we migrate—prefer one stack per surface area to reduce complexity.
+- **Supplementary rules:** `common-ka-*.mdc` files are optional patterns from Common-ka; **defer to this file** when anything conflicts (version, UI stack, packages).
+
+## Project Overview
+
+Premium **offline** Stock Ticker–style board game (original branding; not a licensed digital adaptation of any publisher’s product).
+
+- 6 commodities, dice-driven price movement, dividends, splits, wipeouts.
+- 1 human + 6 AI opponents with distinct personalities.
+- Multi-season campaign, progression, unlocks.
+- Targets: **paid Android** (~$4.99) + **WebGL** playtest.
+- **Deterministic** simulation, **save/load**, **offline-first**.
+
+## Core Architecture (Strict target layout)
+
+```text
+Assets/
+├── Scripts/
+│   ├── Game/
+│   │   ├── Core/          # GameState snapshot, session/turn flow, MarketResolver, event queue (as needed)
+│   │   ├── AI/            # IAgentStrategy + concrete strategies
+│   │   └── Progression/   # Seasons, unlocks, rewards
+│   ├── Infrastructure/
+│   │   └── Save/          # SaveService, versioning, migration
+│   ├── Presentation/      # Board + HUD presenters (hybrid 3D plan)
+│   └── UI/                # Target home for runtime UI; today bootstrap may live under App/ until refactored
+├── Data/
+│   └── Rules/             # ScriptableObjects (balance)
+├── Scenes/
+│   └── Main.unity
+└── ThirdParty/
+    └── ATTRIBUTIONS.md
+```
+
+**Repo note (2026-04-26):** Core logic exists under `Game/Core/` (`GameSession`, `MarketResolver`, `SeededRng`, etc.). Runtime entry is currently [`Assets/Scripts/App/StockTickerGameRoot.cs`](Assets/Scripts/App/StockTickerGameRoot.cs); migrate toward `UI/` + `Presentation/` per hybrid board plan without breaking saves.
+
+### Key Systems
+
+- **GameState:** Central snapshot (`GameStateSnapshot`) — prices, portfolios, cash, season, phase, RNG state, logs.
+- **Turn / session flow:** `GameSession` orchestrates dice → `MarketResolver` → trading windows → season boundaries (evolve toward explicit **TurnSystem** + **event queue** for VFX/UI if useful).
+- **MarketResolver:** Applies Up/Down/Dividend and split/wipeout rules from [`GameRules`](Assets/Scripts/Game/Core/GameRules.cs).
+- **AI:** Six bots via `IAgentStrategy` + `AgentStrategyFactory` (run during trading resolution today; parallel “AI phase” is a refinement).
+- **ProgressionService:** Season end, unlock IDs, wins.
+- **SaveService:** JSON (Newtonsoft), versioning, migration; autosave on pause/quit and explicit Save.
+
+### Data-Driven Design (Mandatory)
+
+- Balance belongs in **ScriptableObjects** under `Assets/Data/Rules/` (create assets in Editor).
+- Use **`Create > StockTicker > Game Rules`** for [`GameRules`](Assets/Scripts/Game/Core/GameRules.cs); extend with `CommodityRules`, `AIProfiles`, `ProgressionRules` SO types as the design matures.
+- **Runtime fallback:** `GameRules.CreateDefaultRuntime()` when no asset is assigned.
+- **Do not** hard-code prices, thresholds, lot sizes, or AI tuning constants in presenters—read from SOs.
+
+### Determinism
+
+- Use **`SeededRng`** (persist `RngState` on `GameStateSnapshot`) for all simulation randomness.
+- Same seed + same inputs ⇒ identical outcomes (EditMode tests, WebGL repro).
+
+### AI Strategy Rules
+
+- **Interface:** `IAgentStrategy` — `DecideTrades(GameSession session, int playerIndex, List<TradeOrder> outOrders)` (or evolve to `TradeAction` model if refactored; keep one naming scheme).
+- **Personalities implemented:** Dividend-Safe, Contrarian, Momentum, Volatility Hunter, Balanced, Chaos+ (Random-Plus style).
+- **Utility-style** heuristics only—**no ML** in MVP.
+
+### UI / UX Rules
+
+- **Mobile-first:** safe area, thumb zone, large touch targets.
+- **Hybrid board plan:** URP table + six tracks + **Screen Space – Camera** HUD (see project hybrid board plan doc).
+- Prefer **prefabs + authored scenes** over infinite runtime `GameObject` construction as visuals harden.
+- Keep assets light; document third-party in `ATTRIBUTIONS.md`.
+
+### Asset and Board Guidelines
+
+- Procedural or prefab-driven **six commodity tracks**; indicators tied to **price in cents** from `GameStateSnapshot`.
+- Prefabs for icons, dice (optional), portfolio rows.
+- WebGL + Android: limit overdraw, batching-friendly materials, modest mesh counts.
+
+### Coding Standards
+
+- **C#** compatible with **Unity 2022.3** / modern language features enabled by that editor.
+- **Namespaces** match folder layout under `StockTicker.*`.
+- **`[CreateAssetMenu]`** on balance SOs.
+- **Tests:** EditMode in `Assets/Scripts/Tests/` (target `Tests/Simulation/` as harness grows).
+- **Platforms:** only `Application.persistentDataPath` for saves; no arbitrary disk paths.
+
+## Cursor Behavior
+
+- Prefer **this file** + the repo README / hybrid board plan for conflicts with generic Unity 6 rules.
+- Generate **complete files** with correct namespaces and headers when adding types.
+- Suggest **Kenney / OpenGameArt / OFL fonts** and record in `ATTRIBUTIONS.md`.
+- Keep modules testable; don’t entangle rules engine with Unity rendering except via presenters.
+
+## Acceptance Criteria Reminder
+
+- Full campaign: human + 6 AIs.
+- Save / resume reliable.
+- WebGL stable for playtest builds.
+- Android build path ready for paid listing (metadata, signing, policies outside this rules file).
+
+You are the Stock Ticker MVP co-pilot: ship phases incrementally and preserve determinism, saves, and original IP posture.

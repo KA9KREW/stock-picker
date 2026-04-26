@@ -1,0 +1,58 @@
+# Material library for Stock Ticker Board.obj (Blender export).
+# Kd = diffuse RGB 0–1. Matches ClassicStockBoard / vintage quotation colors.
+
+newmtl BlackBorder
+Ka 1.000 1.000 1.000
+Kd 0.93 0.92 0.87
+Ks 0.04 0.04 0.04
+d 1.0
+illum 1
+
+newmtl Gold
+Ka 1.000 1.000 1.000
+Kd 0.95 0.62 0.12
+Ks 0.08 0.06 0.04
+d 1.0
+illum 1
+
+newmtl Silver
+Ka 1.000 1.000 1.000
+Kd 0.78 0.78 0.76
+Ks 0.12 0.12 0.12
+d 1.0
+illum 1
+
+newmtl Oil
+Ka 1.000 1.000 1.000
+Kd 0.88 0.52 0.22
+Ks 0.07 0.05 0.03
+d 1.0
+illum 1
+
+newmtl Bonds
+Ka 1.000 1.000 1.000
+Kd 0.58 0.22 0.38
+Ks 0.06 0.04 0.05
+d 1.0
+illum 1
+
+newmtl Industrial
+Ka 1.000 1.000 1.000
+Kd 0.42 0.48 0.58
+Ks 0.06 0.07 0.09
+d 1.0
+illum 1
+
+newmtl Grain
+Ka 1.000 1.000 1.000
+Kd 0.48 0.68 0.32
+Ks 0.05 0.07 0.04
+d 1.0
+illum 1
+
+newmtl LabelBG
+Ka 1.000 1.000 1.000
+Kd 0.96 0.95 0.90
+Ks 0.04 0.04 0.04
+d 1.0
+illum 1

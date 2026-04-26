@@ -1,0 +1,59 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/Library": true,
+    "**/Temp": true,
+    "**/Obj": true,
+    "**/Build": true,
+    "**/Builds": true,
+    "**/Logs": true,
+    "**/*.pidb": true,
+    "**/*.booproj": true,
+    "**/*.svd": true,
+    "**/*.pdb": true,
+    "**/*.mdb": true,
+    "**/*.opendb": true,
+    "**/*.VC.db": true,
+    "**/*.meta": false
+  },
+  "search.exclude": {
+    "**/Library": true,
+    "**/Temp": true,
+    "**/Obj": true,
+    "**/Build": true,
+    "**/Builds": true,
+    "**/Logs": true,
+    "**/*.meta": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/Library/**": true,
+    "**/Temp/**": true,
+    "**/Obj/**": true,
+    "**/Build/**": true,
+    "**/Builds/**": true,
+    "**/Logs/**": true
+  },
+  "dotnet.defaultSolution": "*.sln",
+  "dotnet.server.useOmnisharp": false,
+  "csharp.inlayHints.enableInlayHintsForImplicitObjectCreation": true,
+  "csharp.inlayHints.enableInlayHintsForTypes": true,
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": "explicit"
+    }
+  },
+  "editor.formatOnPaste": true,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "editor.semanticHighlighting.enabled": true,
+  "csharp.semanticHighlighting.enabled": true,
+  "csharp.suppressHiddenDiagnostics": false
+}

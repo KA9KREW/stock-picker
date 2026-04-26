@@ -1,0 +1,123 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="false">
+    <Style src="QuotationBoard.uss" />
+    <ui:VisualElement name="quotation-board-root" class="board-root">
+        <ui:VisualElement name="board-frame" class="board-frame">
+            <ui:VisualElement name="felt" class="felt">
+                <ui:Label name="board-title" text="QUOTATION BOARD" class="board-title" />
+                <ui:VisualElement class="scale-hints">
+                    <ui:Label text="OFF MARKET" class="scale-hint scale-hint--off" />
+                    <ui:Label text="PAR 100" class="scale-hint scale-hint--par" />
+                    <ui:Label text="SPLIT" class="scale-hint scale-hint--split" />
+                </ui:VisualElement>
+                <ui:VisualElement name="scale-row-top" class="scale-row scale-row--ticks">
+                    <ui:Label text="0" class="scale-tick" />
+                    <ui:Label text="10" class="scale-tick" />
+                    <ui:Label text="20" class="scale-tick" />
+                    <ui:Label text="30" class="scale-tick" />
+                    <ui:Label text="40" class="scale-tick" />
+                    <ui:Label text="50" class="scale-tick" />
+                    <ui:Label text="60" class="scale-tick" />
+                    <ui:Label text="70" class="scale-tick" />
+                    <ui:Label text="80" class="scale-tick" />
+                    <ui:Label text="90" class="scale-tick" />
+                    <ui:Label text="100" class="scale-tick scale-tick--par" />
+                    <ui:Label text="110" class="scale-tick" />
+                    <ui:Label text="120" class="scale-tick" />
+                    <ui:Label text="130" class="scale-tick" />
+                    <ui:Label text="140" class="scale-tick" />
+                    <ui:Label text="150" class="scale-tick" />
+                    <ui:Label text="160" class="scale-tick" />
+                    <ui:Label text="170" class="scale-tick" />
+                    <ui:Label text="180" class="scale-tick" />
+                    <ui:Label text="190" class="scale-tick" />
+                    <ui:Label text="200" class="scale-tick" />
+                </ui:VisualElement>
+                <ui:VisualElement name="tracks" class="tracks">
+                    <ui:VisualElement class="track-row">
+                        <ui:Label text="GOLD" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--gold">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--gold" />
+                                <ui:VisualElement class="track-pawn track-pawn--gold" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="track-row">
+                        <ui:Label text="SILVER" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--silver">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--mid" />
+                                <ui:VisualElement class="track-pawn track-pawn--mid" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="track-row">
+                        <ui:Label text="OIL" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--oil">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--low" />
+                                <ui:VisualElement class="track-pawn track-pawn--low" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="track-row">
+                        <ui:Label text="BONDS" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--bonds">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--par" />
+                                <ui:VisualElement class="track-pawn track-pawn--par" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="track-row">
+                        <ui:Label text="INDUSTRIALS" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--industrials">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--high" />
+                                <ui:VisualElement class="track-pawn track-pawn--high" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="track-row track-row--last">
+                        <ui:Label text="GRAIN" class="track-label" />
+                        <ui:VisualElement class="track-chart-wrap">
+                            <ui:VisualElement class="track-chart track-chart--grain">
+                                <ui:VisualElement class="track-par-line" />
+                                <ui:VisualElement class="track-highlight track-highlight--split" />
+                                <ui:VisualElement class="track-pawn track-pawn--split" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="scale-row-bottom" class="scale-row scale-row--ticks scale-row--bottom">
+                    <ui:Label text="0" class="scale-tick" />
+                    <ui:Label text="10" class="scale-tick" />
+                    <ui:Label text="20" class="scale-tick" />
+                    <ui:Label text="30" class="scale-tick" />
+                    <ui:Label text="40" class="scale-tick" />
+                    <ui:Label text="50" class="scale-tick" />
+                    <ui:Label text="60" class="scale-tick" />
+                    <ui:Label text="70" class="scale-tick" />
+                    <ui:Label text="80" class="scale-tick" />
+                    <ui:Label text="90" class="scale-tick" />
+                    <ui:Label text="100" class="scale-tick scale-tick--par" />
+                    <ui:Label text="110" class="scale-tick" />
+                    <ui:Label text="120" class="scale-tick" />
+                    <ui:Label text="130" class="scale-tick" />
+                    <ui:Label text="140" class="scale-tick" />
+                    <ui:Label text="150" class="scale-tick" />
+                    <ui:Label text="160" class="scale-tick" />
+                    <ui:Label text="170" class="scale-tick" />
+                    <ui:Label text="180" class="scale-tick" />
+                    <ui:Label text="190" class="scale-tick" />
+                    <ui:Label text="200" class="scale-tick" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

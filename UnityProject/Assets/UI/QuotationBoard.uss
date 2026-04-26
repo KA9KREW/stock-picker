@@ -1,0 +1,306 @@
+/* Matches ClassicStockBoard.cs: 0–200¢ in 5¢ steps (41 columns), dual 10¢ scales,
+   vintage track colors, gold frame / felt, PAR 100 column, dense grid mockup. */
+
+.board-root {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.board-frame {
+    border-left-width: 7px;
+    border-right-width: 7px;
+    border-top-width: 7px;
+    border-bottom-width: 7px;
+    border-left-color: #d4af37;
+    border-right-color: #d4af37;
+    border-top-color: #d4af37;
+    border-bottom-color: #d4af37;
+    border-radius: 3px;
+    padding: 11px;
+    background-color: #0c160c;
+}
+
+.felt {
+    background-color: #1a2f1a;
+    padding: 16px 18px 14px 18px;
+    min-width: 640px;
+}
+
+.board-title {
+    -unity-font-style: bold;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: #e8c84a;
+    -unity-text-align: middle-center;
+    margin-bottom: 6px;
+    margin-top: 2px;
+    text-shadow:
+        2px 0 #0a0a0a,
+        -2px 0 #0a0a0a,
+        0 2px #0a0a0a,
+        0 -2px #0a0a0a,
+        1px 1px #2a1810;
+}
+
+.scale-hints {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 100px;
+    padding-right: 6px;
+    margin-bottom: 2px;
+}
+
+.scale-hint {
+    -unity-font-style: bold;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.scale-hint--off {
+    color: rgb(55, 52, 48);
+}
+
+.scale-hint--par {
+    color: rgb(35, 32, 28);
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}
+
+.scale-hint--split {
+    color: rgb(40, 70, 120);
+    -unity-text-align: middle-right;
+}
+
+.scale-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.scale-row--ticks {
+    justify-content: space-between;
+    padding-left: 100px;
+    padding-right: 4px;
+    margin-bottom: 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 0, 0, 0.35);
+    padding-bottom: 4px;
+}
+
+.scale-row--bottom {
+    margin-bottom: 0;
+    margin-top: 6px;
+    border-bottom-width: 0;
+    border-top-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.35);
+    padding-top: 4px;
+    padding-bottom: 0;
+}
+
+.scale-tick {
+    -unity-font-style: bold;
+    font-size: 11px;
+    color: rgb(235, 232, 220);
+    min-width: 22px;
+    -unity-text-align: middle-center;
+    flex-shrink: 1;
+}
+
+.scale-tick--par {
+    color: rgb(255, 248, 220);
+    font-size: 12px;
+}
+
+.tracks {
+    flex-direction: column;
+}
+
+.track-row {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 48px;
+    margin-bottom: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: #b8942e;
+    padding-bottom: 5px;
+    margin-top: 5px;
+}
+
+.track-row--last {
+    border-bottom-width: 0;
+    padding-bottom: 0;
+}
+
+.track-label {
+    width: 96px;
+    min-width: 96px;
+    -unity-font-style: bold;
+    font-size: 13px;
+    color: rgb(20, 20, 24);
+    background-color: rgb(238, 236, 228);
+    padding: 6px 8px;
+    margin-right: 10px;
+    -unity-text-align: middle-left;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgb(55, 52, 48);
+    border-right-color: rgb(55, 52, 48);
+    border-top-color: rgb(55, 52, 48);
+    border-bottom-color: rgb(55, 52, 48);
+    align-self: center;
+}
+
+/* ~41 vertical steps: 2.439% per 5¢ cell; grid lines + subtle banding */
+.track-chart-wrap {
+    flex-grow: 1;
+    position: relative;
+    min-height: 46px;
+    align-self: center;
+}
+
+.track-chart {
+    flex-grow: 1;
+    height: 44px;
+    min-height: 44px;
+    position: relative;
+    overflow: hidden;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(24, 24, 26);
+    border-right-color: rgb(24, 24, 26);
+    border-top-color: rgb(12, 12, 14);
+    border-bottom-color: rgb(12, 12, 14);
+    /* Dense vertical ruling (~5¢ slots at typical width) */
+    background-image: repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.14) 0,
+        rgba(0, 0, 0, 0.14) 1px,
+        transparent 1px,
+        transparent 12.68px
+    );
+}
+
+.track-chart--gold {
+    background-color: rgb(242, 158, 31);
+}
+
+.track-chart--silver {
+    background-color: rgb(199, 199, 194);
+}
+
+.track-chart--oil {
+    background-color: rgb(224, 133, 56);
+}
+
+.track-chart--industrials {
+    background-color: rgb(107, 122, 148);
+}
+
+.track-chart--grain {
+    background-color: rgb(122, 173, 82);
+}
+
+.track-chart--bonds {
+    background-color: rgb(148, 56, 97);
+}
+
+/* PAR 100: column index 20 center = 50% */
+.track-par-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    margin-left: -1px;
+    background-color: rgba(212, 175, 55, 0.95);
+}
+
+/* One-slot highlight width ≈ 100% / 41 */
+.track-highlight {
+    position: absolute;
+    top: 8%;
+    height: 84%;
+    width: 2.35%;
+    margin-left: -1.175%;
+    background-color: rgba(255, 255, 235, 0.72);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-color: rgba(255, 240, 150, 0.95);
+    border-right-color: rgba(255, 240, 150, 0.95);
+    border-top-color: rgba(255, 250, 200, 0.9);
+    border-bottom-color: rgba(200, 170, 60, 0.85);
+}
+
+.track-highlight--gold {
+    left: 55%;
+}
+
+.track-highlight--par {
+    left: 50%;
+}
+
+.track-highlight--mid {
+    left: 32%;
+}
+
+.track-highlight--low {
+    left: 18%;
+}
+
+.track-highlight--high {
+    left: 67%;
+}
+
+.track-highlight--split {
+    left: 92%;
+}
+
+.track-pawn {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-left: -10px;
+    bottom: -8px;
+    background-color: #c01818;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: #5a0a0a;
+    border-right-color: #5a0a0a;
+    border-top-color: #e04040;
+    border-bottom-color: #400808;
+}
+
+.track-pawn--gold {
+    left: 55%;
+}
+
+.track-pawn--par {
+    left: 50%;
+}
+
+.track-pawn--mid {
+    left: 32%;
+}
+
+.track-pawn--low {
+    left: 18%;
+}
+
+.track-pawn--high {
+    left: 67%;
+}
+
+.track-pawn--split {
+    left: 92%;
+}

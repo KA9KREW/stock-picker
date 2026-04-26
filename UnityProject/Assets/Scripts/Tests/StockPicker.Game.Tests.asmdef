@@ -1,0 +1,19 @@
+{
+  "name": "StockPicker.Game.Tests",
+  "rootNamespace": "StockPicker.Tests",
+  "references": [
+    "UnityEngine.TestRunner",
+    "StockPicker.Game"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

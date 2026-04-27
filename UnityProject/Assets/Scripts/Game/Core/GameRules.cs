@@ -30,8 +30,8 @@ namespace StockPicker.Game.Core
         [Tooltip("Dice rolls between trading windows.")]
         public int rollsPerTradingWindow = 5;
 
-        [Tooltip("Total dice rolls in one season.")]
-        public int rollsPerSeason = 50;
+        [Tooltip("Total dice rolls (days) in one season.")]
+        public int rollsPerSeason = 365;
 
         [Header("Campaign win (runtime / new game)")]
         public CampaignWinMode campaignWinMode = CampaignWinMode.Seasons;
@@ -57,7 +57,7 @@ namespace StockPicker.Game.Core
             r.resetPriceAfterWipeoutCents = 100;
             r.allowedShareLots = new[] { 500, 1000, 2000, 5000 };
             r.rollsPerTradingWindow = 5;
-            r.rollsPerSeason = 50;
+            r.rollsPerSeason = 365;
             r.campaignWinMode = CampaignWinMode.Seasons;
             r.netWorthGoalCents = 10_000_000;
             r.totalDiceRollsGoal = 12_000;
@@ -74,6 +74,7 @@ namespace StockPicker.Game.Core
             {
                 case NewGamePreset.ClassicSeasons:
                     r.campaignWinMode = CampaignWinMode.Seasons;
+                    r.rollsPerSeason = 365;
                     break;
                 case NewGamePreset.FirstTo100K:
                     r.campaignWinMode = CampaignWinMode.FirstToNetWorth;

@@ -3,7 +3,9 @@
   "rootNamespace": "StockPicker",
   "references": [
     "Newtonsoft.Json",
-    "Unity.TextMeshPro"
+    "Unity.TextMeshPro",
+    "PlayFab",
+    "GoogleSignIn"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

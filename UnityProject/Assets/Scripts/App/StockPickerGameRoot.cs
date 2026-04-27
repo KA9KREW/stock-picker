@@ -1,4 +1,5 @@
 using StockPicker.Game.Core;
+using StockPicker.Infrastructure.Backend;
 using UnityEngine;
 
 namespace StockPicker.App
@@ -11,13 +12,17 @@ namespace StockPicker.App
     {
         [SerializeField] private GameRules _rulesAsset;
         [SerializeField] private int _seasonsPerCampaign;
+        [Tooltip("Must be OFF for Google Play production builds (real PlayFab + Google Sign-In).")]
+        [SerializeField] private bool _useLocalMockBackend = false;
+        [Tooltip("Set PlayFab Title ID and Google OAuth Web Client ID before release.")]
+        [SerializeField] private BackendConfig _backendConfig = new();
 
         private void Awake()
         {
             var flow = GetComponent<GameFlowController>();
             if (flow == null)
                 flow = gameObject.AddComponent<GameFlowController>();
-            flow.Initialize(_rulesAsset, _seasonsPerCampaign);
+            flow.Initialize(_rulesAsset, _seasonsPerCampaign, _backendConfig, _useLocalMockBackend);
 
             if (GetComponent<GameHudView>() == null)
                 gameObject.AddComponent<GameHudView>();

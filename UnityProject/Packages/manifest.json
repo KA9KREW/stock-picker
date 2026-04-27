@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.google.external-dependency-manager": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.187",
     "com.unity.render-pipelines.universal": "14.0.11",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.nuget.newtonsoft-json": "3.2.1",

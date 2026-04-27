@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using StockPicker.Game.Core;
+using StockPicker.Game.Progression;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -32,6 +33,8 @@ namespace StockPicker.App
         private Text _humanSummary;
         private Text _eventText;
         private Text _tradeSummary;
+        private Text _globalLeaderboardText;
+        private Text _cloudStatusText;
         private Text _holdingsText;
         private Text _aiScoreboardText;
         private Text _rollButtonLabel;
@@ -46,6 +49,7 @@ namespace StockPicker.App
         private Button _queueButton;
         private Button _resolveButton;
         private Button _skipButton;
+        private Button _cloudSignInButton;
 
         private int _commodityIndex;
         private int _lotIndex;
@@ -147,7 +151,7 @@ namespace StockPicker.App
 
             var subtitle = UiText(card, "Subtitle", new Vector2(0.08f, 0.70f), new Vector2(0.92f, 0.78f), 22, TextAnchor.MiddleCenter,
                 new Color(0.25f, 0.28f, 0.36f));
-            subtitle.text = "Roll • Trade • Pick a game length";
+            subtitle.text = "Day • Trade • Pick a game length";
 
             void StartNewPreset(NewGamePreset preset)
             {
@@ -167,16 +171,31 @@ namespace StockPicker.App
                 () => StartNewPreset(NewGamePreset.Fast600Rolls));
             MakeSecondaryButton(card, "Classic (seasons)", new Vector2(0.52f, 0.40f), new Vector2(0.86f, 0.48f),
                 () => StartNewPreset(NewGamePreset.ClassicSeasons));
-            MakeSecondaryButton(card, "Load Save", new Vector2(0.14f, 0.28f), new Vector2(0.86f, 0.36f), () =>
+            MakeSecondaryButton(card, "Settings", new Vector2(0.14f, 0.16f), new Vector2(0.86f, 0.24f), () => _settings.Toggle());
+
+            var globalStats = NewRect("GlobalStats", card);
+            globalStats.anchorMin = new Vector2(0.12f, 0.02f);
+            globalStats.anchorMax = new Vector2(0.88f, 0.15f);
+            globalStats.offsetMin = Vector2.zero;
+            globalStats.offsetMax = Vector2.zero;
+            globalStats.gameObject.AddComponent<Image>().color = new Color(0.91f, 0.94f, 0.99f, 0.88f);
+            var statsOutline = globalStats.gameObject.AddComponent<Outline>();
+            statsOutline.effectColor = new Color(0.68f, 0.72f, 0.8f, 0.88f);
+            statsOutline.effectDistance = new Vector2(0f, 1f);
+            _globalLeaderboardText = UiText(globalStats, "GlobalStatsBody", new Vector2(0.02f, 0.32f), new Vector2(0.98f, 0.95f), 16,
+                TextAnchor.UpperLeft, new Color(0.14f, 0.18f, 0.26f));
+            _globalLeaderboardText.supportRichText = true;
+            _globalLeaderboardText.resizeTextForBestFit = false;
+            _globalLeaderboardText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            _globalLeaderboardText.verticalOverflow = VerticalWrapMode.Truncate;
+            _cloudStatusText = UiText(globalStats, "CloudStatus", new Vector2(0.02f, 0.02f), new Vector2(0.64f, 0.30f), 14,
+                TextAnchor.MiddleLeft, new Color(0.18f, 0.25f, 0.35f));
+            _cloudStatusText.resizeTextForBestFit = false;
+            _cloudSignInButton = MakeSecondaryButton(globalStats, "Sign in", new Vector2(0.66f, 0.04f), new Vector2(0.98f, 0.30f), () =>
             {
-                _flow.LoadPressed();
-                _eventLines.Clear();
-                AppendEvent("Save loaded.");
-                SetMenuOpen(false);
+                _flow.BeginCloudSignIn();
                 RefreshAll();
             });
-            MakeSecondaryButton(card, "Save", new Vector2(0.14f, 0.16f), new Vector2(0.48f, 0.24f), () => _flow.Persist());
-            MakeSecondaryButton(card, "Settings", new Vector2(0.52f, 0.16f), new Vector2(0.86f, 0.24f), () => _settings.Toggle());
 
             return panel;
         }
@@ -268,7 +287,7 @@ namespace StockPicker.App
             rollingRt.anchorMax = new Vector2(0.82f, 0.125f);
             rollingRt.offsetMin = Vector2.zero;
             rollingRt.offsetMax = Vector2.zero;
-            _rollButton = MakePrimaryButton(rollingRt, "Roll dice", new Vector2(0f, 0f), new Vector2(1f, 1f), OnRoll);
+            _rollButton = MakePrimaryButton(rollingRt, "Advance day", new Vector2(0f, 0f), new Vector2(1f, 1f), OnRoll);
             _rollButtonLabel = _rollButton.GetComponentInChildren<Text>();
 
             _tradingPanel = NewRect("TradingPanel", panel.GetComponent<RectTransform>()).gameObject;
@@ -421,7 +440,9 @@ namespace StockPicker.App
 
             _phaseTitle.text = phase switch
             {
-                GamePhase.Rolling => $"Rolling • Roll {rollCountSegment}{rollingExtra}",
+                GamePhase.Rolling => rules.campaignWinMode == CampaignWinMode.Seasons
+                    ? $"Rolling • Day {rollCountSegment}{rollingExtra}"
+                    : $"Rolling • Roll {rollCountSegment}{rollingExtra}",
                 GamePhase.Trading => "Trading Window",
                 GamePhase.SeasonComplete => "Season Complete",
                 GamePhase.CampaignComplete => "Campaign complete",
@@ -438,12 +459,15 @@ namespace StockPicker.App
 
             RefreshHoldings(s, m ?? Array.Empty<int>());
             RefreshAiScoreboard(s, m ?? Array.Empty<int>());
+            RefreshGlobalLeaderboard(_flow.Progression);
 
             var trading = phase == GamePhase.Trading;
             _tradingPanel.SetActive(trading);
             _rollingPanel.SetActive(!trading && phase != GamePhase.CampaignComplete);
             if (_rollButtonLabel != null)
-                _rollButtonLabel.text = phase == GamePhase.SeasonComplete ? "Continue" : "Roll dice";
+                _rollButtonLabel.text = phase == GamePhase.SeasonComplete
+                    ? "Continue"
+                    : (rules.campaignWinMode == CampaignWinMode.Seasons ? "Advance day" : "Roll dice");
             _rollButton.interactable = phase is GamePhase.Rolling or GamePhase.SeasonComplete;
 
             _prevCommodityButton.interactable = trading;
@@ -459,6 +483,44 @@ namespace StockPicker.App
             RefreshTradeLine();
 
             SetMenuOpen(_menuOpen);
+        }
+
+        private void RefreshGlobalLeaderboard(ProgressionState progression)
+        {
+            if (_globalLeaderboardText == null || progression == null)
+                return;
+
+            var sb = new StringBuilder(192);
+            sb.Append("<b>Global Human Leaderboard (Beat the Market)</b>\n");
+            sb.Append("Lifetime: <b>$").Append((progression.HumanLifetimeBeatMarketCents / 100f).ToString("N0"))
+                .Append("</b> • Best season: <b>$").Append((progression.HumanBestBeatMarketCents / 100f).ToString("N0"))
+                .Append("</b> • Seasons +: ").Append(progression.HumanBeatMarketSeasons).Append('\n');
+
+            var board = progression.HumanGlobalScoreboard;
+            if (board == null || board.Count == 0)
+            {
+                sb.Append("No ranked traders yet. Complete a season to post your first score.");
+                _globalLeaderboardText.text = sb.ToString();
+                return;
+            }
+
+            var count = Mathf.Min(3, board.Count);
+            for (var i = 0; i < count; i++)
+            {
+                var row = board[i];
+                sb.Append(i + 1).Append(". ")
+                    .Append(string.IsNullOrWhiteSpace(row.PlayerName) ? "You" : row.PlayerName)
+                    .Append(" — <b>$").Append((row.TotalBeatMarketCents / 100f).ToString("N0")).Append("</b>")
+                    .Append(" (best $").Append((row.BestBeatMarketCents / 100f).ToString("N0")).Append(")");
+                if (i < count - 1)
+                    sb.Append('\n');
+            }
+
+            _globalLeaderboardText.text = sb.ToString();
+            if (_cloudStatusText != null)
+                _cloudStatusText.text = _flow.CloudStatus;
+            if (_cloudSignInButton != null)
+                _cloudSignInButton.interactable = _flow.CanBeginCloudSignIn;
         }
 
         private void RefreshHoldings(GameStateSnapshot state, int[] pricesCents)

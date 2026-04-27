@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace StockPicker.App
 {
@@ -91,14 +94,16 @@ namespace StockPicker.App
             panelBg.color = new Color(0.96f, 0.97f, 0.99f, 1f);
 
             AddTitle(pr);
-            var y = 0.72f;
+            var y = 0.76f;
             _uiScaleLabel = AddStepperRow(pr, "UI scale", y, () => AdjustUiScale(-0.06f), () => AdjustUiScale(0.06f));
-            y -= 0.16f;
+            y -= 0.14f;
             _volLabel = AddStepperRow(pr, "Master volume", y, () => AdjustVolume(-0.1f), () => AdjustVolume(0.1f));
-            y -= 0.16f;
+            y -= 0.14f;
             _qualityLabel = AddSingleButtonRow(pr, "Graphics", y, CycleQuality);
-            y -= 0.16f;
+            y -= 0.14f;
             _vibrateLabel = AddSingleButtonRow(pr, "Vibration", y, ToggleVibrate);
+            y -= 0.14f;
+            AddQuitAppButton(pr, y);
             AddCloseButton(pr);
 
             RefreshLabels();
@@ -219,13 +224,46 @@ namespace StockPicker.App
             return t;
         }
 
+        private void AddQuitAppButton(RectTransform panel, float yNorm)
+        {
+            var row = Row(panel, yNorm, 0.11f);
+            var btnGo = new GameObject("QuitApp", typeof(RectTransform));
+            var br = btnGo.GetComponent<RectTransform>();
+            br.SetParent(row, false);
+            br.anchorMin = new Vector2(0.04f, 0.08f);
+            br.anchorMax = new Vector2(0.96f, 0.92f);
+            br.offsetMin = Vector2.zero;
+            br.offsetMax = Vector2.zero;
+            var img = btnGo.AddComponent<Image>();
+            img.color = new Color(0.62f, 0.22f, 0.22f);
+            var btn = btnGo.AddComponent<Button>();
+            var colors = btn.colors;
+            colors.highlightedColor = new Color(0.72f, 0.28f, 0.28f);
+            colors.pressedColor = new Color(0.52f, 0.18f, 0.18f);
+            btn.colors = colors;
+            btn.onClick.AddListener(QuitApplication);
+            var t = TxtOn(br, "t", Vector2.zero, Vector2.one, 22, TextAnchor.MiddleCenter);
+            t.text = "Close app";
+            t.color = Color.white;
+            t.fontStyle = FontStyle.Bold;
+        }
+
+        private static void QuitApplication()
+        {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         private void AddCloseButton(RectTransform panel)
         {
             var go = new GameObject("Close", typeof(RectTransform));
             var rt = go.GetComponent<RectTransform>();
             rt.SetParent(panel, false);
             rt.anchorMin = new Vector2(0.28f, 0.04f);
-            rt.anchorMax = new Vector2(0.72f, 0.12f);
+            rt.anchorMax = new Vector2(0.72f, 0.11f);
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
             var img = go.AddComponent<Image>();
